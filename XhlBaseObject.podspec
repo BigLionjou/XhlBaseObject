@@ -1,19 +1,19 @@
 Pod::Spec.new do |s|
 
   s.name         = "XhlBaseObject"
-  s.version      = '0.8.80'
+  s.version      = '0.0.01'
   s.summary      = "新华龙初始化全局变量组件"
   s.description  = <<-DESC
-                    关于新华龙初始化全局变量组件
+                    关于新华龙初始化全局变量组件 公开发行版本
                    DESC
 
   s.homepage     = "http://www.newchongqing.com"
-  s.license      = "MIT"
-  s.author       = { "Rogue" => "619455850@qq.com" }
+  s.license      = { :type => 'MIT', :file => 'LICENSE' }
+  s.author       = { "Rogue" => "xx408358831@qq.com" }
   s.platform     = :ios, "9.0"
   s.ios.deployment_target = "9.0"
-  s.source       = { :git =>
-    "http://192.168.6.66:81/ios/XhlPrivateRepoForIOS/baseModule/XhlBaseObject", :tag => "#{s.version}" }
+  s.source           = { :git => 'https://github.com/BigLionjou/XhlBaseObject.git', :tag => s.version.to_s }
+
 
   s.source_files  = "XhlBaseObject/*"
   s.public_header_files = "XhlBaseObject/*.h"
