@@ -2,7 +2,7 @@
 //  XHLGradientHelper.m
 //  Example
 //
-//  Created by whbalzac on 3/20/17.
+//  Created by 龚魁华 on 3/20/17.
 //  Copyright © 2017 whbalzac. All rights reserved.
 //
 

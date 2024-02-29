@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "XhlBaseObject"
-  s.version      = '0.0.01'
+  s.version      = '0.0.1'
   s.summary      = "新华龙初始化全局变量组件"
   s.description  = <<-DESC
                     关于新华龙初始化全局变量组件 公开发行版本
