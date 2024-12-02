@@ -18,5 +18,5 @@ FOUNDATION_EXPORT const unsigned char XhlBaseObjectVersionString[];
 
 #import "XHLFoundation.h"
 #import "XHLUIKit.h"
-
+#import "XHLTool.h"
 

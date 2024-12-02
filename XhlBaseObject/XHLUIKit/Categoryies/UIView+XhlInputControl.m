@@ -131,6 +131,14 @@ void xhl_textDidChange(id target) {
             self.cancelTextLengthControlBefore = NO;
         }
             break;
+        case XhlTextControlType_number_space: {
+            self.regularStr = @"^[0-9\\s]*$";
+            self.keyboardType = UIKeyboardTypeNumberPad;
+            self.autocorrectionType = UITextAutocorrectionTypeNo;
+            self.cancelTextLengthControlBefore = NO;
+        }
+            break;
+            
         case XhlTextControlType_letter: {
             self.regularStr = @"^[a-zA-Z]*$";
             self.keyboardType = UIKeyboardTypeASCIICapable;
@@ -341,12 +349,24 @@ void xhl_textDidChange(id target) {
 -(BOOL)empty{
     return [objc_getAssociatedObject(self, _cmd) boolValue];
 }
+
+
+- (NSInteger)recordCount{
+    return [objc_getAssociatedObject(self, _cmd) integerValue];
+}
+- (void)setRecordCount:(NSInteger)recordCount{
+    
+    objc_setAssociatedObject(self, @selector(recordCount), @(recordCount), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    
+}
+
 #pragma mark UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     return xhl_shouldChangeCharactersIn(textField, range, string);
 }
 - (void)textFieldDidChange:(UITextField *)textField {
     xhl_textDidChange(textField);
+    self.recordCount = textField.text.length;
 }
 
 @end
@@ -379,12 +399,22 @@ void xhl_textDidChange(id target) {
     return [objc_getAssociatedObject(self, _cmd) boolValue];
 }
 
+- (NSInteger)recordCount{
+    return [objc_getAssociatedObject(self, _cmd) integerValue];
+}
+- (void)setRecordCount:(NSInteger)recordCount{
+    
+    objc_setAssociatedObject(self, @selector(recordCount), @(recordCount), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    
+}
+
 #pragma mark UITextViewDelegate
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     return xhl_shouldChangeCharactersIn(textView, range, text);
 }
 - (void)textViewDidChange:(UITextView *)textView {
     xhl_textDidChange(textView);
+    self.recordCount = textView.text.length;
 }
 
 @end

@@ -328,6 +328,20 @@
     
     return currentDateString;
 }
+//yyyy年MM月
+- (NSString *)getChineseYM{
+    // 实例化NSDateFormatter
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    // 设置日期格式
+    [formatter setDateFormat:@"yyyy年MM月"];
+    // 获取当前日期
+    NSString *currentDateString = [formatter stringFromDate:self];
+    
+    NSLog(@"%@", currentDateString);
+    
+    return currentDateString;
+}
+
 //yyyy-MM-dd HH:mm:ss
 - (NSString *)getDividerYMDTime{
     // 实例化NSDateFormatter

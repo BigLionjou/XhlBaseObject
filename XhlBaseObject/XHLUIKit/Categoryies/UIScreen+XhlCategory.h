@@ -17,28 +17,27 @@
 /// 获取当前屏幕的高度
 #define Xhl_ScreenHeight   [UIScreen xhl_getScreenHeight]
 
-
-// 标签栏高度
-#define XhlSafeAreaBottomHeight (XhlIPHONE_X ? (49 + 34) : 49)
-
-/// 状态栏高度(来电等情况下，状态栏高度会发生变化，所以应该实时计算) iphone x 系列从刘海平开始算起
-//#define XhlStatusBarHeight ([UIApplication sharedApplication].statusBarHidden ? 0 : ([[UIApplication sharedApplication] statusBarFrame].size.height)) 有bug
-
-#define XhlStatusBarHeight (XhlIPHONE_X ? 44 : 20)
-
+///获取安全区域的 Nav 顶部高度
+#define XhlStatusBarHeight (XhlIPHONE_X ?  XhlIPHONE_KeyWindowSafeAreaInsets.top : 20)
+#define XhlSafeAreaNaviTopY XhlStatusBarHeight
 //导航栏高度
 #define XhlNavtionHeight 44
-
-// 导航栏高度加状态栏
-//#define XhlSafeAreaTopHeight (XhlIPHONE_X ? 88 : 64)
+// 导航栏高度 加 安全高度
 #define XhlSafeAreaTopHeight (XhlStatusBarHeight + XhlNavtionHeight)
 
-// 定义导航栏开始布局的高度，纵坐标的 Y，非 IphoneX 是基于 20 状态栏 的高度布局，而IphoneX是基于 44 的高度开始布局
-//#define XhlSafeAreaNaviTopY (XhlIPHONE_X ? 44 : 20)
-#define XhlSafeAreaNaviTopY XhlStatusBarHeight
 
-#define XhlSafeAreaTabBottomY (XhlIPHONE_X ? 34 : 0)
+///横条
 #define XhlSafeAreaBottomY (XhlIPHONE_X ? 17 : 0)
+/// 获取安全区域的 TabBar 底部高度
+#define XhlSafeAreaTabBottomY (XhlIPHONE_X ? XhlIPHONE_KeyWindowSafeAreaInsets.bottom : 0)
+//标签栏高度
+#define XhlTabBottomHeight 49
+// 标签栏高度 + 安全高度
+#define XhlSafeAreaBottomHeight (XhlSafeAreaTabBottomY + XhlTabBottomHeight)
+
+
+
+
 
 // 屏幕比例适配，以 375px为基
 #define Xhl_matching_scale (Xhl_ScreenWidth / 375.0)

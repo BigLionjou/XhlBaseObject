@@ -21,6 +21,9 @@ typedef NS_ENUM(NSInteger, XhlTextControlType) {
     XhlTextControlType_number_letterSmall,   //数字+小写字母
     XhlTextControlType_number_letterBig, //数字+大写字母
     XhlTextControlType_number_letter,    //数字+字母
+    XhlTextControlType_number_space,   //数字+空格
+    
+    
     
     XhlTextControlType_exclude,     //输入过程中 限制输入不可见字符（包括空格、制表符、换页符等）
     XhlTextControlType_excludeInvisible, //输入过后 去除不可见字符（包括空格、制表符、换页符等）
@@ -88,6 +91,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 //是否有值，配合KVO使用
 @property (nonatomic, assign) BOOL empty;
+//记录length
+@property (nonatomic, assign) NSInteger recordCount;
 
 @property (nonatomic, strong, nullable) XhlInputControlProfile *xhl_inputCP;
 
@@ -98,6 +103,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 //是否有值，配合KVO使用
 @property (nonatomic, assign) BOOL empty;
+//记录length
+@property (nonatomic, assign) NSInteger recordCount;
 
 @property (nonatomic, strong, nullable) XhlInputControlProfile *xhl_inputCP;
 

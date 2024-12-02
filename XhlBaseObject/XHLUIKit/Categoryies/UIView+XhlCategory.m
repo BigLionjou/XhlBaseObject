@@ -17,12 +17,17 @@ static char xhl_kActionHandlerLongPressGestureKey;
 @dynamic cornerRadius;
 @dynamic borderWidth;
 @dynamic borderColor;
+@dynamic shadowOffset;
+@dynamic shadowRadius;
+@dynamic shadowOpacity;
+@dynamic shadowColor;
 
 - (void)xhl_addSubViews{}
 - (void)xhl_configerSubView{}
 - (void)xhl_loadLayouts{}
 - (void)xhl_getData{}
 - (void)xhl_refreshData:(id _Nonnull)data{}
+
 
 - (void)setCornerRadius:(CGFloat)cornerRadius {
     self.layer.cornerRadius = cornerRadius;
@@ -48,6 +53,39 @@ static char xhl_kActionHandlerLongPressGestureKey;
 - (UIColor *)borderColor {
     return [UIColor colorWithCGColor:self.layer.borderColor];
 }
+
+- (void)setShadowColor:(UIColor *)shadowColor {
+    self.layer.shadowColor = shadowColor.CGColor;
+}
+- (UIColor *)shadowColor{
+    return [UIColor colorWithCGColor:self.layer.shadowColor];
+}
+
+
+- (void)setShadowOffset:(CGSize)shadowOffset {
+    self.layer.shadowOffset = shadowOffset;
+}
+- (CGSize)shadowOffset{
+    return self.layer.shadowOffset;
+}
+
+
+- (void)setShadowRadius:(CGFloat)shadowRadius {
+    self.layer.shadowRadius = shadowRadius;
+}
+
+- (CGFloat)shadowRadius{
+    return self.layer.shadowRadius;
+}
+
+- (void)setShadowOpacity:(CGFloat)shadowOpacity {
+    self.layer.shadowOpacity = shadowOpacity;
+}
+- (CGFloat)shadowOpacity{
+    return self.layer.shadowOpacity;
+}
+
+
 
 -(void)setX:(CGFloat)x{
     CGRect frame = self.frame;
@@ -441,4 +479,29 @@ static char xhl_kActionHandlerLongPressGestureKey;
         [self addSubview:view];
     }
 }
+
+
+
+
++ (NSInteger)numberOfLinesForLabel:(UILabel *)label withAttributedString:(NSAttributedString *)attributedString {
+    // 1. 获取 UILabel 的宽度
+    CGFloat labelWidth = label.frame.size.width;
+    
+    // 2. 设置最大尺寸，假设高度是无穷大，宽度是 Label 的宽度
+    CGSize maxSize = CGSizeMake(labelWidth, CGFLOAT_MAX);
+    
+    // 3. 使用 boundingRectWithSize 计算文本所占的总高度
+    CGRect textRect = [attributedString boundingRectWithSize:maxSize
+                                                     options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
+                                                     context:nil];
+    
+    // 4. 获取每行的高度
+    CGFloat lineHeight = label.font.lineHeight;
+    
+    // 5. 计算总行数
+    NSInteger numberOfLines = ceil(textRect.size.height / lineHeight);
+    
+    return numberOfLines;
+}
+
 @end

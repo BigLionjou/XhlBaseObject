@@ -29,19 +29,27 @@ UIColor *lightBlackF9(void);
 
 UIColor *colorWithHexAlpha(UInt32 hex, float alpha);
 UIColor *colorWithHex(UInt32 hex);
+UIColor *colorWithHexString(NSString *hex) ;
 UIColor *colorWithRgbAlpha(float red, float green, float blue, float alpha);
 UIColor *colorWithRgb(float red, float green, float blue);
 
 @interface UIColor (XHLCategory)
 
-+ (UIColor *)xhl_colorWithHex:(UInt32)hex;
-+ (UIColor *)xhl_colorWithHexAlphaHex:(UInt32)hex alpha:(float)alpha;
-+ (UIColor *)xhl_colorWithRgbRed:(float)red green:(float)green blue:(float)blue;
-+ (UIColor *)xhl_colorWithRgbRed:(float)red green:(float)green blue:(float)blue alpha:(float)alpha;
+//随机颜色
 + (UIColor *)xhl_randomColor;
 
-+ (UIColor *)xhl_RGBColorFromHexString:(NSString *)aHexStr;
-+ (UIColor *)xhl_RGBColorFromHexString:(NSString *)aHexStr alpha:(float)aAlpha;
++ (UIColor *)xhl_colorWithHex:(UInt32)hex;
++ (UIColor *)xhl_colorWithHexAlphaHex:(UInt32)hex alpha:(float)alpha;
+
+
+/// 根据hex字符串获取颜色  如果格式错误 默认返回[UIColor BlackColor]
+/// color: 0xrrggbb 0xaarrggbb #rrggbb #aarrggbb
++ (UIColor *)xhl_colorWithHexString:(NSString *)color;
+
+
++ (UIColor *)xhl_colorWithRgbRed:(float)red green:(float)green blue:(float)blue;
++ (UIColor *)xhl_colorWithRgbRed:(float)red green:(float)green blue:(float)blue alpha:(float)alpha;
+
 @end
 
 NS_ASSUME_NONNULL_END

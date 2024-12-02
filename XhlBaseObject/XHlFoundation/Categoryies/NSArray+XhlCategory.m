@@ -7,8 +7,20 @@
 //
 
 #import "NSArray+XhlCategory.h"
+#import <objc/runtime.h>
 
 @implementation NSArray (XHLCategory)
+
+
+- (id)xhl_arrayObjectAtIndex:(NSUInteger)index {
+    if (index < self.count) {
+        return [self objectAtIndex:index];
+    } else {
+        NSLog(@"Index %lu out of bounds for array", (unsigned long)index);
+        return nil;  // 越界时返回 nil
+    }
+}
+
 
 //压缩图片 最大700kb
 - (NSArray <UIImage *>*)xhl_compressImages{
@@ -91,5 +103,22 @@
     NSRange range = [string rangeOfString:@"," options:NSBackwardsSearch];
     if (range.location != NSNotFound) { [string deleteCharactersInRange:range]; }
     return string;
+}
+
+
+- (NSArray<NSArray *> *)xhl_chunkedArrayWithSize:(NSUInteger)chunkSize {
+    NSMutableArray *chunks = [NSMutableArray array];
+      
+    // 遍历原始数组
+    for (NSUInteger i = 0; i < [self count]; i += chunkSize) {
+        // 计算每个子数组的结束索引，确保不越界
+        NSUInteger endIndex = MIN(i + chunkSize, [self count]);
+        // 从原始数组中取出子数组
+        NSArray *subArray = [self subarrayWithRange:NSMakeRange(i, endIndex - i)];
+        // 将子数组添加到结果数组中
+        [chunks addObject:subArray];
+    }
+      
+    return chunks;
 }
 @end

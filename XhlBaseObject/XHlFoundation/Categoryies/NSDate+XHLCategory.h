@@ -79,6 +79,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)getChineseYMDTime;
 //yyyy年MM月dd日
 - (NSString *)getChineseYMD;
+//yyyy年MM月
+- (NSString *)getChineseYM;
 //yyyy-MM-dd HH:mm:ss
 - (NSString *)getDividerYMDTime;
 //yyyy-MM-dd

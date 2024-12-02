@@ -265,12 +265,25 @@ NSArray * xhl_dicArray_data(NSDictionary *dic){
 }
 
 - (NSString *)xhl_jsonString {
-    
     if (!self) {
         return @"";
     }
-    NSData *data = [NSJSONSerialization dataWithJSONObject:self
-                                                   options:kNilOptions error:nil];
+    
+    // 构建过滤后的字典
+    NSMutableDictionary *filteredDict = [NSMutableDictionary dictionary];
+    for (NSString *key in self) {
+        id value = self[key];
+        
+        // 检查值是否是支持 JSON 的类型
+        if ([NSJSONSerialization isValidJSONObject:@{key: value}]) {
+            filteredDict[key] = value;
+        }
+    }
+    
+    // 使用过滤后的字典生成 JSON 数据
+    NSData *data = [NSJSONSerialization dataWithJSONObject:filteredDict
+                                                   options:kNilOptions
+                                                     error:nil];
     return [[NSString alloc] initWithData:data
                                  encoding:NSUTF8StringEncoding];
 }

@@ -22,6 +22,8 @@
 #import "UICollectionViewRightAlignedLayout.h"
 
 //Categoryies
+#import "WKWebView+HLWCategory.h"
+#import "WKWebView+WebCookie.h"
 #import "UIDevice+XhlCategory.h"
 #import "UITextView+XhlCategory.h"
 #import "UIAlertController+XhlCategory.h"

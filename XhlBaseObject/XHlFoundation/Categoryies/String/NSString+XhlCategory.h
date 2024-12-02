@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "NSString+XHLFontHeight.h"
+#import "NSString+XHLUrl.h"
+
 
 // 判断字符串是否为 NSNull nil @""
 #define Xhl_StringIsEmpty(str) ([str isKindOfClass:[NSNull class]] || str == nil || [str length] < 1 || [[str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] < 1 ? YES : NO )
@@ -21,41 +24,57 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CQXhlWdc : NSObject
-
-//由后至前分别为: //可以理解为每-位都是-个boolean变量。0为false 1为true
-///是否展示头部
-@property (nonatomic,assign) BOOL isShowTop;
-///是否展示底部
-@property (nonatomic,assign) BOOL isShowBottom;
-///是否展示顶部返回键
-@property (nonatomic,assign) BOOL isShowBackBtn;
-///是否展示顶部标题
-@property (nonatomic,assign) BOOL isShowTitleLael;
-///是否展示右上角分享按钮
-@property (nonatomic,assign) BOOL isShowMoreBtn;
-///右上角分享按钮是否为单排(如果为1则只展示一排分享按钮, 没有无图反馈之类的按钮，0则按照原有逻辑展示)单排的样式参照底部分享样式
-@property (nonatomic,assign) BOOL shareType;
-///是否展示状态栏 （1为展示）
-@property (nonatomic,assign) BOOL isShowStatusBar;
-///头部状态栏文字颜色（1为黑色)
-@property (nonatomic,assign) BOOL stausBarLightMode;
-
-@end
-
-
 
 @interface NSString (XHLCategory)
 
 
-/// 解析url中XhlWd参数
-- (CQXhlWdc *)analysisURLCQXhlWdc;
 
-//将 &lt 等类似的字符转化为HTML中的“<”等
-+ (NSString *)htmlEntityDecode:(NSString *)string;
+#pragma mark - 判断合法性
 
-//正则去除网络标签
-+(NSString *)gkh_getZZwithHtmlString:(NSString *)string;
+/**
+ *  判断邮箱
+ *
+ *  @return 是否合法
+ */
+- (BOOL)xhl_validateEmail;
+
+
+/// 判断是否含有中文 yes 有
+- (BOOL)xhl_includeChinese;
+
+/**
+ 判断是否是万
+ */
+- (BOOL)xhl_isW;
+/**
+  判断字符串是否为全数字（eg:检查浏览量是否能加1，包含“万” “万+”之类的）
+*/
+-(BOOL)xhl_isNum;
+/**
+ *  验证身份证号码是否正确的方法
+ *
+ *  @return 返回YES或NO表示该身份证号码是否符合国家标准
+ */
+- (BOOL)xhl_validateCardNO;
+
+/// 双方转换为大写比较  默认去掉空格 不需要去掉空格调用下面的方法
+- (BOOL)xhl_upperCaseIsEqualToString:(NSString *)string;
+/// 上面方法是否去掉空格
+- (BOOL)xhl_upperCaseIsEqualToString:(NSString *)string removeWhite:(BOOL)remove;
+
+#pragma mark - 字符串空格回车判断
+/**
+ * @brief 判断字符串是否只包含空格或换行符
+ *
+ * @return BOOL 注意:若字符串为空也会返回 True
+ */
+- (BOOL)xhl_isWhitespaceAndNewlines;
+
+
+//获取最后一个字符
+- (NSString *)last;
+
+
 
 #pragma mark - 加密
 /**
@@ -86,6 +105,8 @@ NS_ASSUME_NONNULL_BEGIN
  *  @return 文本NSString
  */
 - (NSString *)xhl_base64DecodedString;
+//判断string是否为base64加密
+- (BOOL)xhl_isBase64Encoded;
 
 /**
  utf8编码，已经编码过的不在编码
@@ -95,8 +116,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)xhl_stringToUTF8StringEncoding;
 
 
-/// 判断是否含有中文 yes 有
-- (BOOL)xhl_includeChinese;
 #pragma mark - json转换
 /**
  json字符串转换成OC的数据结构
@@ -160,69 +179,9 @@ NS_ASSUME_NONNULL_BEGIN
  @return 返回截取字段
  */
 - (NSString *)xhl_getAfterStrByStr:(NSString *)str;
-#pragma mark - 判断合法性
-
-/**
- *  判断邮箱
- *
- *  @return 是否合法
- */
-- (BOOL)xhl_validateEmail;
-
-/**
- 判断是否是万
- */
-- (BOOL)xhl_isW;
-/**
- *  验证身份证号码是否正确的方法
- *
- *  @return 返回YES或NO表示该身份证号码是否符合国家标准
- */
-- (BOOL)xhl_validateCardNO;
-
-#pragma mark - 计算字符串宽度、高度
-/**
- *  计算文字占用高度（行间距）
- *
- *  @param width  固定宽度
- *  @param font   字体大小
- *  @param LineSpacing 行间距
- *
- *  @return 高度
- */
-- (CGFloat)xhl_getHeightWithWidth:(CGFloat)width
-                             font:(UIFont *)font
-                      LineSpacing:(CGFloat)LineSpacing;
-
-/**
- *  计算文字占用高度（label计算）
- *
- *  @param width  固定宽度
- *  @param font   字体大小
- *
- *  @return 高度
- */
-- (CGFloat)xhl_getHeightWithWidth:(CGFloat)width
-                             font:(UIFont *)font;
-
-/**
- 计算文字占用高度（label计算）
- 
- @param width 固定宽度
- @param font 字体大小
- @param lines 行数
- */
-- (CGFloat)xhl_getHeightWithWidth:(CGFloat)width
-                             font:(UIFont *)font
-                            lines:(NSInteger)lines;
 
 
-/**
- *  根据字符的长度计算label的宽度
- *
- *  @return label的宽度
- */
-- (CGFloat)xhl_getWidthWithHFont:(UIFont *)font;
+
 
 /**
  身份证加隐藏
@@ -238,14 +197,10 @@ NS_ASSUME_NONNULL_BEGIN
  */
 -(NSString *)xhl_phoneString;
 
-#pragma mark - 字符串空格回车判断
-/**
- * @brief 判断字符串是否只包含空格或换行符
- *
- * @return BOOL 注意:若字符串为空也会返回 True
- */
-- (BOOL)xhl_isWhitespaceAndNewlines;
 
+
+
+#pragma mark - 行间距，首航缩紧 前后空格、回车换行符
 /**
  * @brief  去掉字符串前后空格、回车换行符
  *
@@ -253,33 +208,16 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (NSString *)xhl_trimmingWhiteSpaceAndNewLine;
 
-
 //行间距
 - (NSMutableAttributedString *)xhl_attributedStringLineSpacing:(CGFloat)lineSpacing;
 //行间距，首航缩紧
 - (NSMutableAttributedString *)xhl_attributedStringLineSpacing:(CGFloat)lineSpacing firstLineHeadIndent:(CGFloat)firstLineHeadIndent;
-//计算富文本的高度
-- (CGFloat)xhl_calculateHeightWithAttributedString:(NSMutableAttributedString *)attributedString
-                                             Width:(CGFloat)width
-                                              font:(UIFont *)font;
-
-/**
- 
- 获取url中的参数并返回
- @return NSDictionary: 参数字典 url
- */
-- (NSDictionary *)xhl_getUrlParamsComponents;
-- (NSDictionary *)xhl_getUrlParams;
 
 
 
 
-/**
-  判断字符串是否为全数字（eg:检查浏览量是否能加1，包含“万” “万+”之类的）
-*/
--(BOOL)xhl_isNum;
 
-
+#pragma mark - 把字符串按宽度自动切割
 /**
  
   把字符串按宽度自动切割
@@ -291,6 +229,19 @@ NS_ASSUME_NONNULL_BEGIN
                                         width:(CGFloat)labelWidth;
 
 
+
+
+
+
+#pragma mark - 正则匹配表达式 000x000
+//取出000x000
+- (NSString *)xhl_findHyperLinkWithString000x000;
+//取出 正则匹配表达式  contain 包含第一个字符和最后一个字符
+- (NSString *)xhl_findHyperLinkWithegExpStr:(NSString *)regExpStr contain:(BOOL)contain;
+
+
+
+#pragma mark - 格式化 万
 
 // 格式化 万+
 - (NSString *)variableWan;
@@ -320,24 +271,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)variable:(NSString *)unit plusNumber:(CGFloat )plusNumber;
 
 
-- (NSString *)xhl_urlEncode;
-
-//取出000x000
-- (NSString *)xhl_findHyperLinkWithString000x000;
-//取出 正则匹配表达式  contain 包含第一个字符和最后一个字符
-- (NSString *)xhl_findHyperLinkWithegExpStr:(NSString *)regExpStr contain:(BOOL)contain;
-
-//获取拼接后的阿里OSSsuffix链接
-- (NSString *)xhl_getAliOSSSuffix:(NSString *)suffix;
 
 
-//华龙芯json请求
-- (NSDictionary *)xhl_jsonUrlToObejct;
-//获取时间戳地址
-- (NSString *)xhl_getTimeSuffes;
 
-//取出jsonUrl 种的字典
-- (NSDictionary *)xhl_linkUrlJsonBySep:(NSString *)sep;
+
+
+
+
+
 
 @end
 

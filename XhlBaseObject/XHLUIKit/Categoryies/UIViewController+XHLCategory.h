@@ -26,6 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface UIViewController (XHLCategory)<XhlLoadControllersProtocols>
 
 #pragma mark - controller
+// 检查是否有 navigationController 且当前控制器在 viewControllers 树中
+- (BOOL)isPushedAsChildViewController ;
 
 /**
  寻找子页面

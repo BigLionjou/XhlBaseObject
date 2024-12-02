@@ -82,6 +82,11 @@ UIColor *colorWithHex(UInt32 hex) {
     return [UIColor xhl_colorWithHex:hex];
 }
 
+UIColor *colorWithHexString(NSString *hex) {
+    return [UIColor xhl_colorWithHexString:hex];
+}
+
+
 UIColor *colorWithRgbAlpha(float red, float green, float blue, float alpha) {
     return [UIColor xhl_colorWithRgbRed:red green:green blue:blue alpha:alpha];
 }
@@ -92,24 +97,6 @@ UIColor *colorWithRgb(float red, float green, float blue) {
 
 @implementation UIColor (XHLCategory)
 
-+ (UIColor *)xhl_colorWithHex:(UInt32)hex{
-    return [self xhl_colorWithHexAlphaHex:hex alpha:1.0];
-}
-
-+ (UIColor *)xhl_colorWithHexAlphaHex:(UInt32)hex alpha:(float)alpha{
-    CGFloat r = ((hex & 0xff0000) >> 16) / 255.f;
-    CGFloat g = ((hex & 0x00ff00) >> 8) / 255.f;
-    CGFloat b = (hex & 0x0000ff) / 255.f;
-    return [UIColor colorWithRed:r green:g blue:b alpha:alpha];
-}
-
-+ (UIColor *)xhl_colorWithRgbRed:(float)red green:(float)green blue:(float)blue{
-    return [self xhl_colorWithRgbRed:red green:green blue:blue alpha:1.0];
-}
-
-+ (UIColor *)xhl_colorWithRgbRed:(float)red green:(float)green blue:(float)blue alpha:(float)alpha{
-    return [UIColor colorWithRed:red / 255.0 green:green / 255.0 blue:blue / 255.0 alpha:alpha];
-}
 
 + (UIColor *)xhl_randomColor {
     return [UIColor colorWithRed:(CGFloat)RAND_MAX / random()
@@ -118,47 +105,92 @@ UIColor *colorWithRgb(float red, float green, float blue) {
                            alpha:1.0f];
 }
 
-//16进制颜色值与浮点型颜色值的转换
-+ (CGFloat)colorChannelFromHexString:(NSString *)hexString {
-    int num[2] = {0};
-    for (int i = 0 ; i < 2; i++) {
-        int asc = [hexString characterAtIndex:i];
-        // 数字
-        if (asc >= '0' && asc <= '9') {
-            num[i] = asc - '0';
+
++ (UIColor *)xhl_colorWithHex:(UInt32)hex{
+    //读取透明值
+    return [self xhl_colorWithHexAlphaHex:hex alpha:0];
+}
+
++ (UIColor *)xhl_colorWithHexAlphaHex:(UInt32)hex alpha:(float)alpha{
+    
+    float red, green, blue, tAlpha;
+    if(alpha>0){
+        
+        // 处理 0xRRGGBB 格式，不带透明度
+        red = ((hex & 0xFF0000) >> 16) / 255.0;
+        green = ((hex & 0x00FF00) >> 8) / 255.0;
+        blue = (hex & 0x0000FF) / 255.0;
+        return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
+        
+    }else{
+        
+        //UInt32 值大于 0xFFFFFF 或者高 8 位不为 0，则说明它是 8 位的颜色值（0xRRGGBBAA）。
+        if (hex > 0xFFFFFF) {
+            // 处理 0xRRGGBBAA 格式，带透明度
+            red = ((hex & 0xFF000000) >> 24) / 255.0;
+            green = ((hex & 0x00FF0000) >> 16) / 255.0;
+            blue = ((hex & 0x0000FF00) >> 8) / 255.0;
+            tAlpha = (hex & 0x000000FF) / 255.0;
+        } else {
+            // 处理 0xRRGGBB 格式，不带透明度
+            red = ((hex & 0xFF0000) >> 16) / 255.0;
+            green = ((hex & 0x00FF00) >> 8) / 255.0;
+            blue = (hex & 0x0000FF) / 255.0;
+            tAlpha = 1.0;  // 默认不透明
         }
-        // 大写字母
-        else if (asc >= 'A' && asc <= 'F') {
-            num[i] = asc - 'A' + 10;
-        }
-        // 小写字母
-        else if (asc >= 'a' && asc <= 'f') {
-            num[i] = asc - 'a' + 10;
-        }
+        // 返回生成的 UIColor 对象
+        return [UIColor colorWithRed:red green:green blue:blue alpha:tAlpha];
     }
-    return (num[0] * 16 + num[1]) / 255.;
 }
 
 
-+ (UIColor *)xhl_RGBColorFromHexString:(NSString *)aHexStr {
-    return [UIColor xhl_RGBColorFromHexString:aHexStr
-                                        alpha:1.0f];
++ (UIColor *)xhl_colorWithHexString:(NSString *)color {
+    if ([color isKindOfClass:[NSNull class]] || color == nil || [color length] < 1 || [[color stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] < 6) {
+        return [UIColor blackColor];
+    }
+    NSString *cString = [color uppercaseString];
+    // strip 0X if it appears
+    //如果是0x开头的，那么截取字符串，字符串从索引为2的位置开始，一直到末尾
+    if ([cString hasPrefix:@"0X"]){
+        cString = [cString substringFromIndex:2];
+    }
+    //如果是#开头的，那么截取字符串，字符串从索引为1∫的位置开始，一直到末尾
+    if ([cString hasPrefix:@"#"]){
+        cString = [cString substringFromIndex:1];
+    }
+    if ([cString length] != 6 && [cString length] != 8){
+        return [UIColor blackColor];
+    }
+    
+    unsigned rgbValue = 0;
+        NSScanner *scanner = [NSScanner scannerWithString:cString];
+        [scanner scanHexInt:&rgbValue];
+
+    if (cString.length == 6) {
+        // 解析 RRGGBB
+        return [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16) / 255.0
+                               green:((rgbValue & 0x00FF00) >> 8) / 255.0
+                                blue:(rgbValue & 0x0000FF) / 255.0
+                               alpha:1.0];
+    } else if (cString.length == 8) {
+        // 解析 RRGGBBAA
+        return [UIColor colorWithRed:((rgbValue & 0x00FF0000) >> 16) / 255.0
+                               green:((rgbValue & 0x0000FF00) >> 8) / 255.0
+                                blue:(rgbValue & 0x000000FF) / 255.0
+                               alpha:((rgbValue & 0xFF000000) >> 24) / 255.0];
+    }else{
+        return [UIColor blackColor];
+    }
 }
 
-+ (UIColor *)xhl_RGBColorFromHexString:(NSString *)aHexStr
-                                 alpha:(float)aAlpha {
-    if ([aHexStr isKindOfClass:[NSString class]]
-        && aHexStr.length > 6) {// #rrggbb 大小写字母及数字
-        CGFloat redValue = [UIColor colorChannelFromHexString:[aHexStr substringWithRange:NSMakeRange(1, 2)]];
-        CGFloat greenValue = [UIColor colorChannelFromHexString:[aHexStr substringWithRange:NSMakeRange(3, 2)]];
-        CGFloat blueValue = [UIColor colorChannelFromHexString:[aHexStr substringWithRange:NSMakeRange(5, 2)]];
-        UIColor *rgbColor = [UIColor colorWithRed:redValue
-                                            green:greenValue
-                                             blue:blueValue
-                                            alpha:aAlpha];
-        return rgbColor;
-    }
-    return [UIColor blackColor]; // 默认黑色
+
+
++ (UIColor *)xhl_colorWithRgbRed:(float)red green:(float)green blue:(float)blue{
+    return [self xhl_colorWithRgbRed:red green:green blue:blue alpha:1.0];
+}
+
++ (UIColor *)xhl_colorWithRgbRed:(float)red green:(float)green blue:(float)blue alpha:(float)alpha{
+    return [UIColor colorWithRed:red / 255.0 green:green / 255.0 blue:blue / 255.0 alpha:alpha];
 }
 
 @end

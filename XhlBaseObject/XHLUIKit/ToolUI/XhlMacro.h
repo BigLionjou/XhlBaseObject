@@ -2,7 +2,7 @@
 //  XhlMacro.h
 //  XhlBaseObjectDemo
 //
-//  Created by 龚魁华 on 2019/1/10.
+//  Created by rogue on 2019/1/10.
 //  Copyright © 2019 rogue. All rights reserved.
 //
 
@@ -30,6 +30,15 @@ NS_ASSUME_NONNULL_BEGIN
 #else
 # define NSLog(...) NSLog(__VA_ARGS__)
 #endif
+
+#ifdef __OPTIMIZE__
+    // Release模式下禁用日志输出
+    #define printf(...) (void)0
+#else
+    // Debug模式下启用printf日志输出
+    #define printf(...) printf(__VA_ARGS__); printf("\n")
+#endif
+
 
 #pragma mark - Clang
 

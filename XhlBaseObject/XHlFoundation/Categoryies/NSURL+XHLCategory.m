@@ -35,13 +35,13 @@
            NSString *string = [oldString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
            newString = [newString stringByReplacingOccurrencesOfString:oldString withString:string];
        }
-       //空格处理
-       if ([newString containsString:@" "]) {
-           newString = [newString stringByReplacingOccurrencesOfString:@" " withString:@"%20"];
-
-       }
      //如果需要处理其它特殊字符,在这里继续判断处理即可.
    }
+    //空格处理
+    if ([newString containsString:@" "]) {
+        newString = [newString stringByReplacingOccurrencesOfString:@" " withString:@"%20"];
+
+    }
    return newString;
 }
 

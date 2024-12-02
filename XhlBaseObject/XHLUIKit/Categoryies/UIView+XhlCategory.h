@@ -30,6 +30,12 @@ typedef void (^xhlGestureActionBlock)(UIGestureRecognizer *gestureRecoginzer);
 @property (assign, nonatomic) IBInspectable CGFloat cornerRadius;
 @property (assign, nonatomic) IBInspectable CGFloat borderWidth;
 @property (strong, nonatomic) IBInspectable UIColor *borderColor;
+@property (assign, nonatomic) IBInspectable CGSize shadowOffset;
+@property (assign, nonatomic) IBInspectable CGFloat shadowRadius;
+@property (assign, nonatomic) IBInspectable CGFloat shadowOpacity;
+@property (strong, nonatomic) IBInspectable UIColor *shadowColor;
+
+
 
 @property (nonatomic, assign) CGFloat x;
 @property (nonatomic, assign) CGFloat y;
@@ -112,6 +118,10 @@ typedef void (^xhlGestureActionBlock)(UIGestureRecognizer *gestureRecoginzer);
 - (void)xhl_removeAllSubviews;
 
 - (void)xhl_addSubViews:(NSArray *)views;
+
+//结合 UILabel 的宽度和 NSAttributedString 的样式，来计算出文本所占的高度，然后将总高度除以一行文本的高度，得出行数。
++ (NSInteger)numberOfLinesForLabel:(UILabel *)label withAttributedString:(NSAttributedString *)attributedString ;
+
 @end
 
 NS_ASSUME_NONNULL_END

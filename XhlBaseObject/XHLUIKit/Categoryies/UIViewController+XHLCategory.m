@@ -17,6 +17,14 @@
 
 #pragma mark - controller
 
+- (BOOL)isPushedAsChildViewController {
+    // 检查是否有 navigationController 且当前控制器在 viewControllers 树中
+    return self.navigationController != nil &&
+           [self.navigationController.viewControllers containsObject:self] &&
+           self.navigationController.viewControllers.firstObject != self;
+}
+
+
 - (UIViewController *)xhl_ToViewControllerName:(NSString *)strClassName{
     
     Class cls = NSClassFromString(strClassName);

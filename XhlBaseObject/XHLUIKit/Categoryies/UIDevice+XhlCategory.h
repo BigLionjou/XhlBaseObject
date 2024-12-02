@@ -93,8 +93,33 @@
 #define SYSTEM_VERSION_EQUAL_TO(v)  ([[[UIDevice currentDevice] cachedSystemVersion] compare:v options:NSNumericSearch] == NSOrderedSame)
 #define SYSTEM_VERSION_LOWWER_THAN(v)  ([[[UIDevice currentDevice] cachedSystemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
 
-/// iPhoneX  iPhoneXS  iPhoneXS Max  iPhoneXR 机型判断
-#define XhlIPHONE_X ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? ((NSInteger)(([[UIScreen mainScreen] currentMode].size.height/[[UIScreen mainScreen] currentMode].size.width)*100) == 216) : NO)
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
+
+/// 获取 KeyWindow 的安全区域
+#define XhlIPHONE_KeyWindowSafeAreaInsets \
+({ \
+    UIEdgeInsets safeInsets = UIEdgeInsetsZero; \
+    if (@available(iOS 11.0, *)) { \
+        UIWindow *keyWindow = UIApplication.sharedApplication.keyWindow; \
+        if (!keyWindow && @available(iOS 13.0, *)) { \
+            for (UIWindowScene *scene in UIApplication.sharedApplication.connectedScenes) { \
+                if ([scene isKindOfClass:[UIWindowScene class]]) { \
+                    keyWindow = ((UIWindowScene *)scene).windows.firstObject; \
+                    break; \
+                } \
+            } \
+        } \
+        safeInsets = keyWindow.safeAreaInsets; \
+    } \
+    safeInsets; \
+})
+
+#pragma clang diagnostic pop
+
+/// 刘海屏检测宏
+#define XhlIPHONE_X (XhlIPHONE_KeyWindowSafeAreaInsets.top > 20.0)
 
 // 设备屏幕尺寸
 #define ScreenSizeOfDevice4     CGSizeMake(320, 480)

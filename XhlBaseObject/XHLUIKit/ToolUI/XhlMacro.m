@@ -2,7 +2,7 @@
 //  XhlMacro.m
 //  XhlBaseObjectDemo
 //
-//  Created by 龚魁华 on 2019/1/10.
+//  Created by rogue on 2019/1/10.
 //  Copyright © 2019 rogue. All rights reserved.
 //
 
